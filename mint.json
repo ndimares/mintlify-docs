@@ -1,32 +1,48 @@
 {
   "$schema": "https://mintlify.com/schema.json",
+  "name": "Starter Kit",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#FBE331",
+    "light": "#FBE331",
+    "dark": "#FBE331",
+    "anchors": {
+      "from": "#FBE331",
+      "to": "#FBE331"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:hi@mintlify.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://dashboard.mintlify.com"
+  },
+  "openapi": "https://raw.githubusercontent.com/speakeasy-sdks/bar-typescript/main/openapi.yaml",
   "anchors": [
     {
-      "icon": "book-open-cover",
       "name": "Documentation",
+      "icon": "book-open-cover",
       "url": "https://mintlify.com/docs"
     },
     {
-      "icon": "slack",
       "name": "Community",
+      "icon": "slack",
       "url": "https://mintlify.com/community"
     },
-    { "icon": "newspaper", "name": "Blog", "url": "https://mintlify.com/blog" }
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://mintlify.com/blog"
+    }
   ],
-  "colors": {
-    "anchors": { "from": "#FBE331", "to": "#FBE331" },
-    "dark": "#FBE331",
-    "light": "#FBE331",
-    "primary": "#FBE331"
-  },
-  "favicon": "/favicon.png",
-  "footerSocials": {
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch",
-    "x": "https://x.com/mintlify"
-  },
-  "logo": { "dark": "/logo/dark.svg", "light": "/logo/light.svg" },
-  "name": "Starter Kit",
   "navigation": [
     {
       "group": "authentication",
@@ -36,19 +52,33 @@
     },
     {
       "group": "drinks",
-      "pages": ["drinks/get-a-list-of-drinks", "drinks/get-a-drink"]
+      "pages": [
+        "drinks/get-a-list-of-drinks",
+        "drinks/get-a-drink"
+      ]
     },
     {
       "group": "ingredients",
-      "pages": ["ingredients/get-a-list-of-ingredients"]
+      "pages": [
+        "ingredients/get-a-list-of-ingredients"
+      ]
     },
-    { "group": "orders", "pages": ["orders/create-an-order"] },
-    { "group": "config", "pages": ["config/subscribe-to-webhooks"] }
+    {
+      "group": "orders",
+      "pages": [
+        "orders/create-an-order"
+      ]
+    },
+    {
+      "group": "config",
+      "pages": [
+        "config/subscribe-to-webhooks"
+      ]
+    }
   ],
-  "openapi": "https://raw.githubusercontent.com/speakeasy-sdks/bar-typescript/main/openapi.yaml",
-  "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
-  },
-  "topbarLinks": [{ "name": "Support", "url": "mailto:hi@mintlify.com" }]
+  "footerSocials": {
+    "x": "https://x.com/mintlify",
+    "github": "https://github.com/mintlify",
+    "linkedin": "https://www.linkedin.com/company/mintsearch"
+  }
 }
