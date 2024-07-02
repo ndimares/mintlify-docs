@@ -148,6 +148,26 @@ paths:
           $ref: "#/components/responses/APIError"
         default:
           $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - label: getDrink
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.drinks.getDrink("<value>");
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
 
   /drink/{name}: #TODO: this should be by product code and we should have search by name
     get:
