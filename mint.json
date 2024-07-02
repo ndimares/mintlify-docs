@@ -7,9 +7,9 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
+    "primary": "#191601",
     "light": "#07C983",
-    "dark": "#0D9373",
+    "dark": "#191601",
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -71,7 +71,37 @@
     {
       "group": "API Documentation",
       "pages": [
-        "api-reference/introduction"
+        {
+          "group": "authentication",
+          "pages": [
+            "authentication/authenticate-with-the-api-by-providing-a-username-and-password"
+          ]
+        },
+        {
+          "group": "drinks",
+          "pages": [
+            "drinks/get-a-list-of-drinks",
+            "drinks/get-a-drink"
+          ]
+        },
+        {
+          "group": "ingredients",
+          "pages": [
+            "ingredients/get-a-list-of-ingredients"
+          ]
+        },
+        {
+          "group": "orders",
+          "pages": [
+            "orders/create-an-order"
+          ]
+        },
+        {
+          "group": "config",
+          "pages": [
+            "config/subscribe-to-webhooks"
+          ]
+        }
       ]
     },
     {
