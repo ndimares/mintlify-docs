@@ -45,7 +45,7 @@
     { "group": "orders", "pages": ["orders/create-an-order"] },
     { "group": "config", "pages": ["config/subscribe-to-webhooks"] }
   ],
-  "openapi": ["./openapi.yaml"],
+  "openapi": "https://raw.githubusercontent.com/speakeasy-sdks/bar-typescript/main/openapi.yaml",
   "topbarCtaButton": {
     "name": "Dashboard",
     "url": "https://dashboard.mintlify.com"
