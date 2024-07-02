@@ -69,39 +69,14 @@
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "API Reference",
       "pages": [
-        {
-          "group": "authentication",
-          "pages": [
-            "authentication/authenticate-with-the-api-by-providing-a-username-and-password"
-          ]
-        },
-        {
-          "group": "drinks",
-          "pages": [
-            "drinks/get-a-list-of-drinks",
-            "drinks/get-a-drink"
-          ]
-        },
-        {
-          "group": "ingredients",
-          "pages": [
-            "ingredients/get-a-list-of-ingredients"
-          ]
-        },
-        {
-          "group": "orders",
-          "pages": [
-            "orders/create-an-order"
-          ]
-        },
-        {
-          "group": "config",
-          "pages": [
-            "config/subscribe-to-webhooks"
-          ]
-        }
+        "authenticate-with-the-api-by-providing-a-username-and-password",
+        "get-a-list-of-drinks",
+        "get-a-drink",
+        "get-a-list-of-ingredients",
+        "create-an-order",
+        "subscribe-to-webhooks"
       ]
     }
   ],
