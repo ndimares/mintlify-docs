@@ -149,10 +149,11 @@ paths:
         default:
           $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: getDrink
+        - label: listDrinks
           lang: typescript
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+            import { DrinkType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
 
             const barSDK = new BarSDK({
               security: {
@@ -161,7 +162,7 @@ paths:
             });
 
             async function run() {
-              const result = await barSDK.drinks.getDrink("<value>");
+              const result = await barSDK.drinks.listDrinks(DrinkType.Spirit);
 
               // Handle the result
               console.log(result)
@@ -193,7 +194,26 @@ paths:
           $ref: "#/components/responses/APIError"
         default:
           $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - label: getDrink
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.drinks.getDrink("<value>");
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
   /ingredients:
     get:
       operationId: listIngredients
@@ -233,12 +253,33 @@ paths:
                         items:
                           type: integer
                     required:
-                      - resultArray
-                  
+                      - resultArray  
         "5XX":
           $ref: "#/components/responses/APIError"
         default:
           $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - label: listIngredients
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.ingredients.listIngredients(347327, [
+                "<value>",
+              ]);
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
 
   /order:
     post:
@@ -298,6 +339,33 @@ paths:
                   $ref: "#/components/responses/APIError"
                 default:
                   $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - label: createOrder
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+            import { OrderType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.orders.createOrder([
+                {
+                  type: OrderType.Ingredient,
+                  productCode: "AC-A2DF3",
+                  quantity: 138554,
+                },
+              ], "<value>");
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
   /webhooks/subscribe:
     post:
       operationId: subscribeToWebhooks
@@ -327,6 +395,28 @@ paths:
           $ref: "#/components/responses/APIError"
         default:
           $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - label: subscribeToWebhooks
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.config.subscribeToWebhooks([
+                {},
+              ]);
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
 webhooks:
   stockUpdate:
     post:
