@@ -1,0 +1,608 @@
+components:
+  responses:
+    APIError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError'
+      description: An error occurred interacting with the API.
+    UnknownError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: An unknown error occurred interacting with the API.
+  schemas:
+    APIError:
+      properties:
+        code:
+          type: string
+        details:
+          additionalProperties: true
+          type: object
+        message:
+          type: string
+      type: object
+    Drink:
+      properties:
+        name:
+          description: The name of the drink.
+          examples:
+            - Old Fashioned
+            - Manhattan
+            - Negroni
+          type: string
+        price:
+          description: The price of one unit of the drink in US cents.
+          examples:
+            - 1000
+            - 1200
+            - 1500
+          type: number
+        productCode:
+          description: The product code of the drink, only available when authenticated.
+          examples:
+            - AC-A2DF3
+            - NAC-3F2D1
+            - APM-1F2D3
+          type: string
+        stock:
+          description: The number of units of the drink in stock, only available when authenticated.
+          readOnly: true
+          type: integer
+        type:
+          $ref: '#/components/schemas/DrinkType'
+      required:
+        - name
+        - price
+      type: object
+    DrinkType:
+      description: The type of drink.
+      enum:
+        - cocktail
+        - non-alcoholic
+        - beer
+        - wine
+        - spirit
+        - other
+      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      type: object
+    Ingredient:
+      properties:
+        name:
+          description: The name of the ingredient.
+          examples:
+            - Sugar Syrup
+            - Angostura Bitters
+            - Orange Peel
+          type: string
+        productCode:
+          description: The product code of the ingredient, only available when authenticated.
+          examples:
+            - AC-A2DF3
+            - NAC-3F2D1
+            - APM-1F2D3
+          type: string
+        stock:
+          description: The number of units of the ingredient in stock, only available when authenticated.
+          examples:
+            - 10
+            - 5
+            - 0
+          readOnly: true
+          type: integer
+        type:
+          $ref: '#/components/schemas/IngredientType'
+      required:
+        - name
+        - type
+      type: object
+    IngredientType:
+      description: The type of ingredient.
+      enum:
+        - fresh
+        - long-life
+        - packaged
+      type: string
+    Order:
+      description: An order for a drink or ingredient.
+      properties:
+        productCode:
+          description: The product code of the drink or ingredient.
+          examples:
+            - AC-A2DF3
+            - NAC-3F2D1
+            - APM-1F2D3
+          type: string
+        quantity:
+          description: The number of units of the drink or ingredient to order.
+          minimum: 1
+          type: integer
+        status:
+          description: The status of the order.
+          enum:
+            - pending
+            - processing
+            - complete
+          readOnly: true
+          type: string
+        type:
+          $ref: '#/components/schemas/OrderType'
+      required:
+        - type
+        - productCode
+        - quantity
+        - status
+      type: object
+    OrderType:
+      description: The type of order.
+      enum:
+        - drink
+        - ingredient
+      type: string
+  securitySchemes:
+    apiKey:
+      in: header
+      name: Authorization
+      type: apiKey
+    clientCredentials:
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://speakeasy.bar/oauth2/token/
+      type: oauth2
+externalDocs:
+  description: The Speakeasy Bar Documentation.
+  url: https://docs.speakeasy.bar
+info:
+  contact:
+    email: support@speakeasy.bar
+    name: Speakeasy Support
+    url: https://support.speakeasy.bar
+  description: A secret underground bar that serves drinks to those in the know.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  summary: A bar that serves drinks.
+  termsOfService: https://speakeasy.bar/terms
+  title: The Speakeasy Bar
+  version: 1.0.0
+openapi: 3.1.0
+paths:
+  /authenticate:
+    post:
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                password:
+                  type: string
+                username:
+                  type: string
+              type: object
+        required: true
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+                type: object
+          description: The api key to use for authenticated endpoints.
+        "401":
+          description: Invalid credentials provided.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      security: []
+      summary: Authenticate with the API by providing a username and password.
+      tags:
+        - authentication
+      x-codeSamples:
+        - label: authenticate
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK();
+
+            async function run() {
+              const result = await barSDK.authentication.authenticate({});
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+  /drink/{name}:
+    get:
+      description: Get a drink by name, if authenticated this will include stock levels and product codes otherwise it will only include public information.
+      operationId: getDrink
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Drink'
+          description: A drink.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      summary: Get a drink.
+      tags:
+        - drinks
+      x-codeSamples:
+        - label: getDrink
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.drinks.getDrink("<value>");
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+  /drinks:
+    get:
+      description: Get a list of drinks, if authenticated this will include stock levels and product codes otherwise it will only include public information.
+      operationId: listDrinks
+      parameters:
+        - description: The type of drink to filter by. If not provided all drinks will be returned.
+          in: query
+          name: drinkType
+          required: false
+          schema:
+            $ref: '#/components/schemas/DrinkType'
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Drink'
+                type: array
+          description: A list of drinks.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      security:
+        - clientCredentials:
+            - read:drinks
+      summary: Get a list of drinks.
+      tags:
+        - drinks
+      x-codeSamples:
+        - label: listDrinks
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+            import { DrinkType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.drinks.listDrinks(DrinkType.Spirit);
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+      x-speakeasy-usage-example: true
+  /ingredients:
+    get:
+      description: Get a list of ingredients, if authenticated this will include stock levels and product codes otherwise it will only include public information.
+      operationId: listIngredients
+      parameters:
+        - in: query
+          name: page
+          required: true
+          schema:
+            type: integer
+        - description: A list of ingredients to filter by. If not provided all ingredients will be returned.
+          explode: false
+          in: query
+          name: ingredients
+          required: false
+          schema:
+            items:
+              type: string
+            type: array
+          style: form
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      resultArray:
+                        items:
+                          type: integer
+                        type: array
+                    required:
+                      - resultArray
+                    type: object
+                type: object
+          description: A list of ingredients.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      summary: Get a list of ingredients.
+      tags:
+        - ingredients
+      x-codeSamples:
+        - label: listIngredients
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.ingredients.listIngredients(347327, [
+                "<value>",
+              ]);
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+  /order:
+    post:
+      callbacks:
+        orderUpdate:
+          '{$request.query.callback_url}':
+            post:
+              description: Receive order updates from the supplier, this will be called whenever the status of an order changes.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      properties:
+                        order:
+                          $ref: '#/components/schemas/Order'
+                      type: object
+                required: true
+              responses:
+                5XX:
+                  $ref: '#/components/responses/APIError'
+                "200":
+                  description: The order update was received successfully.
+                default:
+                  $ref: '#/components/responses/UnknownError'
+              summary: Receive order updates.
+              tags:
+                - orders
+      description: Create an order for a drink.
+      operationId: createOrder
+      parameters:
+        - description: The url to call when the order is updated.
+          in: query
+          name: callback_url
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/Order'
+              type: array
+        required: true
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: The order was created successfully.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      summary: Create an order.
+      tags:
+        - orders
+      x-codeSamples:
+        - label: createOrder
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+            import { OrderType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.orders.createOrder([
+                {
+                  type: OrderType.Ingredient,
+                  productCode: "AC-A2DF3",
+                  quantity: 138554,
+                },
+              ], "<value>");
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+      x-speakeasy-usage-example: true
+  /webhooks/subscribe:
+    post:
+      description: Subscribe to webhooks.
+      operationId: subscribeToWebhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                properties:
+                  url:
+                    type: string
+                  webhook:
+                    enum:
+                      - stockUpdate
+                    type: string
+                type: object
+              type: array
+        required: true
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          description: The webhook was subscribed to successfully.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      summary: Subscribe to webhooks.
+      tags:
+        - config
+      x-codeSamples:
+        - label: subscribeToWebhooks
+          lang: typescript
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.config.subscribeToWebhooks([
+                {},
+              ]);
+
+              // Handle the result
+              console.log(result)
+            }
+
+            run();
+  x-speakeasy-errors:
+    statusCodes:
+      - 4XX
+      - 5XX
+security:
+  - apiKey: []
+  - clientCredentials:
+      - read:basic
+servers:
+  - description: The production server.
+    url: https://speakeasy.bar
+    x-speakeasy-server-id: prod
+  - description: The staging server.
+    url: https://staging.speakeasy.bar
+    x-speakeasy-server-id: staging
+  - description: A per-organization and per-environment API.
+    url: https://{organization}.{environment}.speakeasy.bar
+    variables:
+      environment:
+        default: prod
+        description: The environment name. Defaults to the production environment.
+        enum:
+          - prod
+          - staging
+          - dev
+      organization:
+        default: api
+        description: The organization name. Defaults to a generic organization.
+    x-speakeasy-server-id: customer
+tags:
+  - description: The drinks endpoints.
+    name: drinks
+  - description: The ingredients endpoints.
+    name: ingredients
+  - description: The orders endpoints.
+    name: orders
+  - description: The authentication endpoints.
+    name: authentication
+  - name: config
+webhooks:
+  stockUpdate:
+    post:
+      description: Receive stock updates from the bar, this will be called whenever the stock levels of a drink or ingredient changes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                drink:
+                  $ref: '#/components/schemas/Drink'
+                ingredient:
+                  $ref: '#/components/schemas/Ingredient'
+              type: object
+        required: true
+      responses:
+        5XX:
+          $ref: '#/components/responses/APIError'
+        "200":
+          description: The stock update was received successfully.
+        default:
+          $ref: '#/components/responses/UnknownError'
+      summary: Receive stock updates.
+      tags:
+        - drinks
+        - ingredients
+x-speakeasy-pagination:
+  inputs:
+    - in: parameters
+      name: page
+      type: page
+  outputs:
+    results: $.data.resultArray
+  type: offsetLimit
+x-speakeasy-retries:
+  backoff:
+    exponent: 1.5
+    initialInterval: 500
+    maxElapsedTime: 3600000
+    maxInterval: 60000
+  retryConnectionErrors: true
+  statusCodes:
+    - 5XX
+  strategy: backoff
