@@ -7,9 +7,9 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#191601",
+    "primary": "#0D9373",
     "light": "#07C983",
-    "dark": "#191601",
+    "dark": "#0D9373",
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -31,6 +31,7 @@
       "url": "api-reference"
     }
   ],
+  "openapi": ["/openapi.yaml"],
   "anchors": [
     {
       "name": "Documentation",
@@ -51,11 +52,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
+      "pages": ["introduction", "quickstart", "development"]
     },
     {
       "group": "Essentials",
@@ -69,18 +66,133 @@
       ]
     },
     {
-      "group": "API Reference",
+      "group": "API Documentation",
+      "pages": ["api-reference/introduction"]
+    },
+    {
+      "group": "API Endpoints",
       "pages": [
-        "authenticate-with-the-api-by-providing-a-username-and-password",
-        "get-a-list-of-drinks",
-        "get-a-drink",
-        "get-a-list-of-ingredients",
-        "create-an-order",
-        "subscribe-to-webhooks"
+        "apiendpoints/get-an-apiendpoint",
+        "apiendpoints/get-all-api-endpoints-for-a-particular-apiid",
+        "apiendpoints/get-all-apiendpoints-for-a-particular-apiid-and-versionid",
+        "apiendpoints/find-an-apiendpoint-via-its-displayname",
+        "apiendpoints/upsert-an-apiendpoint",
+        "apiendpoints/delete-an-apiendpoint",
+        "apiendpoints/generate-an-openapi-specification-for-a-particular-apiendpoint",
+        "apiendpoints/generate-a-postman-collection-for-a-particular-apiendpoint"
+      ]
+    },
+    {
+      "group": "APIs",
+      "pages": [
+        "apis/get-a-list-of-apis-for-a-given-workspace",
+        "apis/get-all-api-versions-for-a-particular-apiendpoint",
+        "apis/upsert-an-api",
+        "apis/delete-an-api",
+        "apis/generate-an-openapi-specification-for-a-particular-api",
+        "apis/generate-a-postman-collection-for-a-particular-api"
+      ]
+    },
+    {
+      "group": "Artifacts",
+      "pages": [
+        "artifacts/get-v1artifactsnamespaces-revisions",
+        "artifacts/get-v1artifactsnamespaces-tags",
+        "artifacts/get-manifest-for-a-particular-reference",
+        "artifacts/get-blob-for-a-particular-digest",
+        "artifacts/get-access-token-for-communicating-with-oci-distribution-endpoints",
+        "artifacts/each-namespace-contains-many-revisions",
+        "artifacts/add-tags-to-an-existing-revision"
+      ]
+    },
+    {
+      "group": "Auth",
+      "pages": [
+        "auth/get-information-about-the-current-user",
+        "auth/get-access-allowances-for-a-particular-workspace",
+        "auth/get-or-refresh-an-access-token-for-the-current-workspace",
+        "auth/validate-the-current-api-key"
+      ]
+    },
+    {
+      "group": "Embeds",
+      "pages": [
+        "embeds/get-an-embed-access-token-for-the-current-workspace",
+        "embeds/get-all-valid-embed-access-tokens-for-the-current-workspace",
+        "embeds/revoke-an-embed-access-embedtoken"
+      ]
+    },
+    {
+      "group": "Events",
+      "pages": [
+        "events/get-v1workspace-events",
+        "events/get-v1workspace-eventstargets",
+        "events/get-v1workspace-eventstargets-events",
+        "events/post-events-for-a-specific-workspace"
+      ]
+    },
+    {
+      "group": "GitHub",
+      "pages": [
+        "github/get-v1githubcheck_access",
+        "github/post-v1githubconfigure_target",
+        "github/post-v1githubtrigger_action"
+      ]
+    },
+    {
+      "group": "Metadata",
+      "pages": [
+        "metadata/get-all-metadata-for-a-particular-apiid-and-versionid",
+        "metadata/insert-metadata-for-a-particular-apiid-and-versionid",
+        "metadata/delete-metadata-for-a-particular-apiid-and-versionid"
+      ]
+    },
+    {
+      "group": "Organizations",
+      "pages": [
+        "organizations/get-organizations-for-a-user",
+        "organizations/get-billing-usage-summary-for-a-particular-organization"
+      ]
+    },
+    {
+      "group": "Reports",
+      "pages": [
+        "reports/get-the-signed-access-url-for-the-linting-reports-for-a-particular-document",
+        "reports/get-the-signed-access-url-for-the-change-reports-for-a-particular-document",
+        "reports/upload-a-report"
+      ]
+    },
+    {
+      "group": "Requests",
+      "pages": [
+        "requests/get-information-about-a-particular-request",
+        "requests/query-the-event-log-to-retrieve-a-list-of-requests",
+        "requests/generate-a-postman-collection-for-a-particular-request"
+      ]
+    },
+    {
+      "group": "Schemas",
+      "pages": [
+        "api-reference/schemas/get-information-about-all-schemas-associated-with-a-particular-apiid",
+        "api-reference/schemas/get-information-about-the-latest-schema",
+        "api-reference/schemas/get-information-about-a-particular-schema-revision-for-an-api",
+        "api-reference/schemas/get-a-diff-of-two-schema-revisions-for-an-api",
+        "api-reference/schemas/download-the-latest-schema-for-a-particular-apiid",
+        "api-reference/schemas/download-a-particular-schema-revision-for-an-api",
+        "api-reference/schemas/register-a-schema",
+        "api-reference/schemas/delete-a-particular-schema-revision-for-an-api"
+      ]
+    },
+
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/get",
+        "api-reference/endpoint/create",
+        "api-reference/endpoint/delete"
       ]
     }
   ],
-  "openapi": ["./openapi.yaml"],
   "footerSocials": {
     "x": "https://x.com/mintlify",
     "github": "https://github.com/mintlify",
