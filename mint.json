@@ -70,7 +70,7 @@
          ]
       }
    ],
-   "openapi":["/openapi-with-code-samples.yaml"],
+   "openapi":["/openapi.yaml"],
    "topbarCtaButton":{
       "name":"Dashboard",
       "url":"https://dashboard.mintlify.com"
