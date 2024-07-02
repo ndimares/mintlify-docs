@@ -1,0 +1,9 @@
+workflowVersion: 1.0.0
+sources:
+    merge-code-samples-into-spec:
+        inputs:
+            - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/bar-api
+        overlays:
+            - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/code-samples-typescript-bar-typescript:main
+        output: ./openapi-with-code-samples.json
+targets: {}
