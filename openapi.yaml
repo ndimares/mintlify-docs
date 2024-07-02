@@ -169,8 +169,8 @@ paths:
             }
 
             run();
-        - lang: python
-          label: listDrinks
+        - label: listDrinks
+          lang: python
           source: |-
             from speakeasy_bar_py import BarPython
             from speakeasy_bar_py.models import components
@@ -232,8 +232,8 @@ paths:
             }
 
             run();
-        - lang: python
-          label: getDrink
+        - label: getDrink
+          lang: python
           source: |-
             from speakeasy_bar_py import BarPython
             from speakeasy_bar_py.models import components
@@ -316,26 +316,6 @@ paths:
             }
 
             run();
-        - label: listIngredients
-          lang: python
-          source: |-
-            from speakeasy_bar_py import BarPython
-            from speakeasy_bar_py.models import components
-            
-            s = BarPython(
-                security=components.Security(
-                    api_key="<YOUR_API_KEY_HERE>",
-                ),
-            )
-            
-            
-            res = s.ingredients.list_ingredients(page=347327, ingredients=[
-                "<value>",
-            ])
-            
-            if res.object is not None:
-                # handle response
-                pass
 
   /order:
     post:
@@ -422,7 +402,7 @@ paths:
             }
 
             run();
-       - label: createOrder
+        - label: createOrder
           lang: python
           source: |-
             from speakeasy_bar_py import BarPython
