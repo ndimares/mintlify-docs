@@ -149,8 +149,8 @@ paths:
         default:
           $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: listDrinks
-          lang: typescript
+        - lang: typescript
+          label: listDrinks
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
             import { DrinkType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
