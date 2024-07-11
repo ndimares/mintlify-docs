@@ -39,9 +39,9 @@
    "name":"Starter Kit",
    "navigation":[
       {
-         "group":"authentication",
-         "pages":[
-            "authentication/authenticate-with-the-api-by-providing-a-username-and-password"
+         "group": "Introduction",
+         "pages": [
+           "api-reference/introduction"
          ]
       },
       {
