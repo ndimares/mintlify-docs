@@ -110,7 +110,7 @@ paths:
       x-codeSamples:
         - lang: typescript
           label: authenticate
-          source: |-
+          source: |
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
             const barSDK = new BarSDK();
