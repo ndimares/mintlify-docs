@@ -4,7 +4,6 @@ sources:
         inputs:
             - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/bar-api
         overlays:
-            - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/code-samples-python-my-first-target:main
             - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/code-samples-typescript-bar-typescript:main
         output: ./openapi.yaml
 targets: {}
