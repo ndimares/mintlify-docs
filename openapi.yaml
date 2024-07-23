@@ -25,18 +25,27 @@ servers:
   - url: https://{organization}.{environment}.speakeasy.bar
     description: A per-organization and per-environment API.
     x-speakeasy-server-id: customer
-
+    variables:
+      organization:
+        description: The organization name. Defaults to a generic organization.
+        default: api
+      environment:
+        description: The environment name. Defaults to the production environment.
+        default: prod
+        enum:
+          - prod
+          - staging
+          - dev
 x-speakeasy-retries:
   strategy: backoff
   backoff:
-    initialInterval: 500        # 500 milliseconds
-    maxInterval: 60000          # 60 seconds
-    maxElapsedTime: 3600000     # 5 minutes
+    initialInterval: 500 # 500 milliseconds
+    maxInterval: 60000 # 60 seconds
+    maxElapsedTime: 3600000 # 5 minutes
     exponent: 1.5
   statusCodes:
     - 5XX
   retryConnectionErrors: true
-  
 x-speakeasy-pagination:
   type: offsetLimit
   inputs:
@@ -48,7 +57,7 @@ x-speakeasy-pagination:
 security:
   - apiKey: []
   - clientCredentials:
-    - read:basic
+      - read:basic
 tags:
   - name: drinks
     description: The drinks endpoints.
@@ -59,9 +68,7 @@ tags:
   - name: authentication
     description: The authentication endpoints.
   - name: config
-
 paths:
-
   x-speakeasy-errors:
     statusCodes: # Defines status codes to handle as errors for all operations
       - 4XX # Wildcard to handle all status codes in the 400-499 range
@@ -116,7 +123,6 @@ paths:
             }
 
             run();
-
   /drinks:
     get:
       x-speakeasy-usage-example: true
@@ -125,7 +131,7 @@ paths:
       description: Get a list of drinks, if authenticated this will include stock levels and product codes otherwise it will only include public information.
       security:
         - clientCredentials:
-          - read:drinks
+            - read:drinks
       tags:
         - drinks
       parameters:
@@ -169,25 +175,6 @@ paths:
             }
 
             run();
-        - label: listDrinks
-          lang: python
-          source: |-
-            from speakeasy_bar_py import BarPython
-            from speakeasy_bar_py.models import components
-            
-            s = BarPython(
-                security=components.Security(
-                    api_key="<YOUR_API_KEY_HERE>",
-                ),
-            )
-            
-            
-            res = s.drinks.list_drinks(drink_type=components.DrinkType.SPIRIT)
-            
-            if res.drinks is not None:
-                # handle response
-                pass
-
   /drink/{name}: #TODO: this should be by product code and we should have search by name
     get:
       operationId: getDrink
@@ -213,8 +200,8 @@ paths:
         default:
           $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: getDrink
-          lang: typescript
+        - lang: typescript
+          label: getDrink
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
@@ -232,24 +219,6 @@ paths:
             }
 
             run();
-        - label: getDrink
-          lang: python
-          source: |-
-            from speakeasy_bar_py import BarPython
-            from speakeasy_bar_py.models import components
-            
-            s = BarPython(
-                security=components.Security(
-                    api_key="<YOUR_API_KEY_HERE>",
-                ),
-            )
-            
-            
-            res = s.drinks.get_drink(name="<value>")
-            
-            if res.drink is not None:
-                # handle response
-                pass
   /ingredients:
     get:
       operationId: listIngredients
@@ -289,14 +258,14 @@ paths:
                         items:
                           type: integer
                     required:
-                      - resultArray  
+                      - resultArray
         "5XX":
           $ref: "#/components/responses/APIError"
         default:
           $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: listIngredients
-          lang: typescript
+        - lang: typescript
+          label: listIngredients
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
@@ -316,27 +285,6 @@ paths:
             }
 
             run();
-        - label: listIngredients
-          lang: python
-          source: |-
-              from speakeasy_bar_py import BarPython
-              from speakeasy_bar_py.models import components
-              
-              s = BarPython(
-                  security=components.Security(
-                      api_key="<YOUR_API_KEY_HERE>",
-                  ),
-              )
-              
-              
-              res = s.ingredients.list_ingredients(page=347327, ingredients=[
-                  "<value>",
-              ])
-              
-              if res.object is not None:
-                  # handle response
-                  pass
-
   /order:
     post:
       operationId: createOrder
@@ -396,8 +344,8 @@ paths:
                 default:
                   $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: createOrder
-          lang: typescript
+        - lang: typescript
+          label: createOrder
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
             import { OrderType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
@@ -422,30 +370,6 @@ paths:
             }
 
             run();
-        - label: createOrder
-          lang: python
-          source: |-
-            from speakeasy_bar_py import BarPython
-            from speakeasy_bar_py.models import components
-            
-            s = BarPython(
-                security=components.Security(
-                    api_key="<YOUR_API_KEY_HERE>",
-                ),
-            )
-            
-            
-            res = s.orders.create_order(request_body=[
-                {
-                    "type": components.OrderType.INGREDIENT,
-                    "product_code": "AC-A2DF3",
-                    "quantity": 138554,
-                },
-            ], callback_url="<value>")
-            
-            if res.order is not None:
-                # handle response
-                pass
   /webhooks/subscribe:
     post:
       operationId: subscribeToWebhooks
@@ -476,8 +400,8 @@ paths:
         default:
           $ref: "#/components/responses/UnknownError"
       x-codeSamples:
-        - label: subscribeToWebhooks
-          lang: typescript
+        - lang: typescript
+          label: subscribeToWebhooks
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
