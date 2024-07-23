@@ -157,7 +157,7 @@ paths:
       x-codeSamples:
         - lang: typescript
           label: listDrinks
-          source: |-
+          source: |
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
             import { DrinkType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
 
@@ -202,7 +202,7 @@ paths:
       x-codeSamples:
         - lang: typescript
           label: getDrink
-          source: |-
+          source: |
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
 
             const barSDK = new BarSDK({
