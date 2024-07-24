@@ -57,7 +57,7 @@ x-speakeasy-pagination:
 security:
   - apiKey: []
   - clientCredentials:
-      - read:basic
+    - read:basic
 tags:
   - name: drinks
     description: The drinks endpoints.
@@ -131,7 +131,7 @@ paths:
       description: Get a list of drinks, if authenticated this will include stock levels and product codes otherwise it will only include public information.
       security:
         - clientCredentials:
-            - read:drinks
+          - read:drinks
       tags:
         - drinks
       parameters:
