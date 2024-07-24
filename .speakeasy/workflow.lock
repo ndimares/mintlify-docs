@@ -1,9 +1,9 @@
-speakeasyVersion: 1.326.0
+speakeasyVersion: 1.345.4
 sources:
     merge-code-samples-into-spec:
         sourceNamespace: merge-code-samples-into-spec
-        sourceRevisionDigest: sha256:760b23578d0b4d2853f0c59de643d49e2e4dffcbb0b0d9bed175ea859ca9a69e
-        sourceBlobDigest: sha256:6bf4741a8b56fbb6799e1c6860ca58275c50827d4acc9835ffbae513c20cb5ae
+        sourceRevisionDigest: sha256:663d16e24657242b87740ca80173ab78d77be2b2a53beff0a42d1aa4fb5288aa
+        sourceBlobDigest: sha256:e4d7ccc4a78c18d4cc4eb1fa455d90b66d81df41ff2b08f42ae5eb8122314245
         tags:
             - latest
             - main
@@ -17,7 +17,7 @@ workflow:
                 - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/bar-api
             overlays:
                 - location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/code-samples-typescript-bar-typescript:main
-            output: ./openapi-with-code-samples.json
+            output: ./openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/speakeasy-bar-test/speakeasy-bar-test/merge-code-samples-into-spec
     targets: {}
