@@ -25,7 +25,17 @@ servers:
   - url: https://{organization}.{environment}.speakeasy.bar
     description: A per-organization and per-environment API.
     x-speakeasy-server-id: customer
-    
+    variables:
+      organization:
+        description: The organization name. Defaults to a generic organization.
+        default: api
+      environment:
+        description: The environment name. Defaults to the production environment.
+        default: prod
+        enum:
+          - prod
+          - staging
+          - dev
 x-speakeasy-retries:
   strategy: backoff
   backoff:
@@ -47,7 +57,7 @@ x-speakeasy-pagination:
 security:
   - apiKey: []
   - clientCredentials:
-    - read:basic
+      - read:basic
 tags:
   - name: drinks
     description: The drinks endpoints.
@@ -121,7 +131,7 @@ paths:
       description: Get a list of drinks, if authenticated this will include stock levels and product codes otherwise it will only include public information.
       security:
         - clientCredentials:
-          - read:drinks
+            - read:drinks
       tags:
         - drinks
       parameters:
