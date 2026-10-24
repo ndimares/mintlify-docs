@@ -25,7 +25,17 @@ servers:
   - url: https://{organization}.{environment}.speakeasy.bar
     description: A per-organization and per-environment API.
     x-speakeasy-server-id: customer
-    
+    variables:
+      organization:
+        description: The organization name. Defaults to a generic organization.
+        default: api
+      environment:
+        description: The environment name. Defaults to the production environment.
+        default: prod
+        enum:
+          - prod
+          - staging
+          - dev
 x-speakeasy-retries:
   strategy: backoff
   backoff:
@@ -47,7 +57,7 @@ x-speakeasy-pagination:
 security:
   - apiKey: []
   - clientCredentials:
-    - read:basic
+      - read:basic
 tags:
   - name: drinks
     description: The drinks endpoints.
@@ -58,6 +68,8 @@ tags:
   - name: authentication
     description: The authentication endpoints.
   - name: config
+  - name: food
+    description: The food endpoints.
 paths:
   x-speakeasy-errors:
     statusCodes: # Defines status codes to handle as errors for all operations
@@ -108,8 +120,7 @@ paths:
             async function run() {
               const result = await barSDK.authentication.authenticate({});
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
             }
 
             run();
@@ -121,7 +132,7 @@ paths:
       description: Get a list of drinks, if authenticated this will include stock levels and product codes otherwise it will only include public information.
       security:
         - clientCredentials:
-          - read:drinks
+            - read:drinks
       tags:
         - drinks
       parameters:
@@ -149,7 +160,6 @@ paths:
           label: listDrinks
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
-            import { DrinkType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
 
             const barSDK = new BarSDK({
               security: {
@@ -158,10 +168,9 @@ paths:
             });
 
             async function run() {
-              const result = await barSDK.drinks.listDrinks(DrinkType.Spirit);
+              const result = await barSDK.drinks.listDrinks();
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
             }
 
             run();
@@ -204,8 +213,7 @@ paths:
             async function run() {
               const result = await barSDK.drinks.getDrink("<value>");
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
             }
 
             run();
@@ -266,12 +274,9 @@ paths:
             });
 
             async function run() {
-              const result = await barSDK.ingredients.listIngredients(347327, [
-                "<value>",
-              ]);
+              const result = await barSDK.ingredients.listIngredients(982293);
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
             }
 
             run();
@@ -338,7 +343,6 @@ paths:
           label: createOrder
           source: |-
             import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
-            import { OrderType } from "@speakeasy-sdks/speakeasy-bar/sdk/models/shared";
 
             const barSDK = new BarSDK({
               security: {
@@ -347,16 +351,9 @@ paths:
             });
 
             async function run() {
-              const result = await barSDK.orders.createOrder([
-                {
-                  type: OrderType.Ingredient,
-                  productCode: "AC-A2DF3",
-                  quantity: 138554,
-                },
-              ], "<value>");
+              const result = await barSDK.orders.createOrder([]);
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
             }
 
             run();
@@ -402,12 +399,96 @@ paths:
             });
 
             async function run() {
-              const result = await barSDK.config.subscribeToWebhooks([
-                {},
-              ]);
+              const result = await barSDK.config.subscribeToWebhooks([]);
 
-              // Handle the result
-              console.log(result)
+              console.log(result);
+            }
+
+            run();
+  /food/{name}:
+    get:
+      operationId: getFood
+      summary: Get a food item.
+      description: Get a food item by name.
+      tags:
+        - food
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A food item.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+        "5XX":
+          $ref: "#/components/responses/APIError"
+        default:
+          $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - lang: typescript
+          label: getFood
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.food.getFood("<value>");
+
+              console.log(result);
+            }
+
+            run();
+  /foods:
+    get:
+      operationId: listFoods
+      summary: Get a list of food items.
+      description: Get a list of food items.
+      tags:
+        - food
+      responses:
+        "200":
+          description: A list of food items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    examples: "roti, naan, pizza"
+        "5XX":
+          $ref: "#/components/responses/APIError"
+        default:
+          $ref: "#/components/responses/UnknownError"
+      x-codeSamples:
+        - lang: typescript
+          label: listFoods
+          source: |-
+            import { BarSDK } from "@speakeasy-sdks/speakeasy-bar";
+
+            const barSDK = new BarSDK({
+              security: {
+                apiKey: "<YOUR_API_KEY_HERE>",
+              },
+            });
+
+            async function run() {
+              const result = await barSDK.food.listFoods();
+
+              console.log(result);
             }
 
             run();
@@ -466,6 +547,13 @@ components:
             - Old Fashioned
             - Manhattan
             - Negroni
+        volume:
+          description: The volume of the drink in milliliters.
+          type: integer
+          examples:
+            - 100
+            - 200
+            - 300
         type:
           $ref: "#/components/schemas/DrinkType"
         price:
